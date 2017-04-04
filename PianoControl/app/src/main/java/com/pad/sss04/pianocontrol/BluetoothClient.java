@@ -16,8 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -44,8 +42,6 @@ public class BluetoothClient extends AppCompatActivity {
     private static final int REQUEST_ENABLE_BT = 3;
 
     // Layout Views
-    private ListView mConversationView;
-    private EditText mOutEditText;
     private Button mSendButton;
 
     // Name of the connected device
@@ -59,10 +55,8 @@ public class BluetoothClient extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (D) Log.e(TAG, "+++ ON CREATE +++");
-
-        // Set up the window layout
         setContentView(R.layout.main);
+        if (D) Log.e(TAG, "+++ ON CREATE +++");
 
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -71,7 +65,6 @@ public class BluetoothClient extends AppCompatActivity {
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             finish();
-            return;
         }
     }
 
@@ -115,9 +108,7 @@ public class BluetoothClient extends AppCompatActivity {
         mSendButton = (Button) findViewById(R.id.button_send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // Send a message using content of the edit text widget
-//                TextView view = (TextView) findViewById(R.id.edit_text_out);
-//                String message = view.getText().toString();
+                // Send a test message
                 String message = "Test message";
                 sendMessage(message);
             }
@@ -126,18 +117,6 @@ public class BluetoothClient extends AppCompatActivity {
         // Initialize the BluetoothChatService to perform bluetooth connections
         mClientService = new BluetoothClientService(this, mHandler);
 
-    }
-
-    @Override
-    public synchronized void onPause() {
-        super.onPause();
-        if (D) Log.e(TAG, "- ON PAUSE -");
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (D) Log.e(TAG, "-- ON STOP --");
     }
 
     @Override
