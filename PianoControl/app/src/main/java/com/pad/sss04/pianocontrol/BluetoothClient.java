@@ -1,6 +1,5 @@
 package com.pad.sss04.pianocontrol;
 
-import android.app.ActionBar;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -16,7 +15,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -52,10 +50,6 @@ public class BluetoothClient extends AppCompatActivity {
 
     // Name of the connected device
     private String mConnectedDeviceName = null;
-    // Array adapter for the conversation thread
-    private ArrayAdapter<String> mConversationArrayAdapter;
-    // String buffer for outgoing messages
-    private StringBuffer mOutStringBuffer;
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
     // Member object for the chat services
@@ -65,7 +59,7 @@ public class BluetoothClient extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(D) Log.e(TAG, "+++ ON CREATE +++");
+        if (D) Log.e(TAG, "+++ ON CREATE +++");
 
         // Set up the window layout
         setContentView(R.layout.main);
@@ -84,7 +78,7 @@ public class BluetoothClient extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        if(D) Log.e(TAG, "++ ON START ++");
+        if (D) Log.e(TAG, "++ ON START ++");
 
         // If BT is not on, request that it be enabled.
         // setupConnection() will then be called during onActivityResult
@@ -100,7 +94,7 @@ public class BluetoothClient extends AppCompatActivity {
     @Override
     public synchronized void onResume() {
         super.onResume();
-        if(D) Log.e(TAG, "+ ON RESUME +");
+        if (D) Log.e(TAG, "+ ON RESUME +");
 
         // Performing this check in onResume() covers the case in which BT was
         // not enabled during onStart(), so we were paused to enable it...
@@ -117,21 +111,12 @@ public class BluetoothClient extends AppCompatActivity {
     private void setupConnection() {
         Log.d(TAG, "setupConnection()");
 
-        // Initialize the array adapter for the conversation thread
-//        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
-//        mConversationView = (ListView) findViewById(R.id.in);
-//        mConversationView.setAdapter(mConversationArrayAdapter);
-
-        // Initialize the compose field with a listener for the return key
-//        mOutEditText = (EditText) findViewById(R.id.edit_text_out);
-//        mOutEditText.setOnEditorActionListener(mWriteListener);
-
         // Initialize the send button with a listener that for click events
         mSendButton = (Button) findViewById(R.id.button_send);
         mSendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Send a message using content of the edit text widget
-                TextView view = (TextView) findViewById(R.id.edit_text_out);
+//                TextView view = (TextView) findViewById(R.id.edit_text_out);
 //                String message = view.getText().toString();
                 String message = "Test message";
                 sendMessage(message);
@@ -141,20 +126,18 @@ public class BluetoothClient extends AppCompatActivity {
         // Initialize the BluetoothChatService to perform bluetooth connections
         mClientService = new BluetoothClientService(this, mHandler);
 
-        // Initialize the buffer for outgoing messages
-//        mOutStringBuffer = new StringBuffer("");
     }
 
     @Override
     public synchronized void onPause() {
         super.onPause();
-        if(D) Log.e(TAG, "- ON PAUSE -");
+        if (D) Log.e(TAG, "- ON PAUSE -");
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if(D) Log.e(TAG, "-- ON STOP --");
+        if (D) Log.e(TAG, "-- ON STOP --");
     }
 
     @Override
@@ -162,11 +145,11 @@ public class BluetoothClient extends AppCompatActivity {
         super.onDestroy();
         // Stop the Bluetooth chat services
         if (mClientService != null) mClientService.stop();
-        if(D) Log.e(TAG, "--- ON DESTROY ---");
+        if (D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
     private void ensureDiscoverable() {
-        if(D) Log.d(TAG, "ensure discoverable");
+        if (D) Log.d(TAG, "ensure discoverable");
         if (mBluetoothAdapter.getScanMode() !=
                 BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
             Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
@@ -177,7 +160,8 @@ public class BluetoothClient extends AppCompatActivity {
 
     /**
      * Sends a message.
-     * @param message  A string of text to send.
+     *
+     * @param message A string of text to send.
      */
     private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
@@ -191,10 +175,6 @@ public class BluetoothClient extends AppCompatActivity {
             // Get the message bytes and tell the BluetoothChatService to write
             byte[] send = message.getBytes();
             mClientService.write(send);
-
-            // Reset out string buffer to zero and clear the edit text field
-//            mOutStringBuffer.setLength(0);
-//            mOutEditText.setText(mOutStringBuffer);
         }
     }
 
@@ -207,70 +187,29 @@ public class BluetoothClient extends AppCompatActivity {
                         String message = view.getText().toString();
                         sendMessage(message);
                     }
-                    if(D) Log.i(TAG, "END onEditorAction");
+                    if (D) Log.i(TAG, "END onEditorAction");
                     return true;
                 }
             };
 
-    private final void setStatus(int resId) {
-        final ActionBar actionBar = getActionBar();
-//        actionBar.setSubtitle(resId);
-    }
-
-    private final void setStatus(CharSequence subTitle) {
-        final ActionBar actionBar = getActionBar();
-//        actionBar.setSubtitle(subTitle);
-    }
 
     // The Handler that gets information back from the BluetoothChatService
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-//                case MESSAGE_STATE_CHANGE:
-//                    if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
-//                    switch (msg.arg1) {
-//                        case BluetoothClientService.STATE_CONNECTED:
-////                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-//                            mConversationArrayAdapter.clear();
-//                            break;
-//                        case BluetoothClientService.STATE_CONNECTING:
-//                            setStatus(R.string.title_connecting);
-//                            break;
-//                        case BluetoothClientService.STATE_LISTEN:
-//                        case BluetoothClientService.STATE_NONE:
-////                            setStatus(R.string.title_not_connected);
-//                            break;
-//                    }
-//                    break;
-                case MESSAGE_WRITE:
-                    byte[] writeBuf = (byte[]) msg.obj;
-                    // construct a string from the buffer
-                    String writeMessage = new String(writeBuf);
-//                    mConversationArrayAdapter.add("Me:  " + writeMessage);
-                    break;
-                case MESSAGE_READ:
-                    byte[] readBuf = (byte[]) msg.obj;
-                    // construct a string from the valid bytes in the buffer
-                    String readMessage = new String(readBuf, 0, msg.arg1);
-                    mConversationArrayAdapter.add(mConnectedDeviceName+":  " + readMessage);
-                    break;
                 case MESSAGE_DEVICE_NAME:
-                    // save the connected device's name
+                    // Display connection confirmation
                     mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
                     Toast.makeText(getApplicationContext(), "Connected to "
                             + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
-                    break;
-                case MESSAGE_TOAST:
-                    Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
-                            Toast.LENGTH_SHORT).show();
                     break;
             }
         }
     };
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(D) Log.d(TAG, "onActivityResult " + resultCode);
+        if (D) Log.d(TAG, "onActivityResult " + resultCode);
         switch (requestCode) {
             case REQUEST_CONNECT_DEVICE_SECURE:
                 // When DeviceListActivity returns with a device to connect
@@ -317,7 +256,7 @@ public class BluetoothClient extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        Intent serverIntent = null;
+        Intent serverIntent;
         switch (item.getItemId()) {
             case R.id.secure_connect_scan:
                 // Launch the DeviceListActivity to see devices and do scan
