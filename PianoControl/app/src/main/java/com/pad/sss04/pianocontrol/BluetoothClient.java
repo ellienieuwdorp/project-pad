@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class BluetoothClient extends AppCompatActivity {
+
     // Debugging
     private static final String TAG = "BluetoothClient";
     private static final boolean D = true;
@@ -86,13 +87,13 @@ public class BluetoothClient extends AppCompatActivity {
         if(D) Log.e(TAG, "++ ON START ++");
 
         // If BT is not on, request that it be enabled.
-        // setupChat() will then be called during onActivityResult
+        // setupConnection() will then be called during onActivityResult
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
             // Otherwise, setup the chat session
         } else {
-            if (mClientService == null) setupChat();
+            if (mClientService == null) setupConnection();
         }
     }
 
@@ -113,17 +114,17 @@ public class BluetoothClient extends AppCompatActivity {
         }
     }
 
-    private void setupChat() {
-        Log.d(TAG, "setupChat()");
+    private void setupConnection() {
+        Log.d(TAG, "setupConnection()");
 
         // Initialize the array adapter for the conversation thread
-        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
-        mConversationView = (ListView) findViewById(R.id.in);
-        mConversationView.setAdapter(mConversationArrayAdapter);
+//        mConversationArrayAdapter = new ArrayAdapter<String>(this, R.layout.message);
+//        mConversationView = (ListView) findViewById(R.id.in);
+//        mConversationView.setAdapter(mConversationArrayAdapter);
 
         // Initialize the compose field with a listener for the return key
-        mOutEditText = (EditText) findViewById(R.id.edit_text_out);
-        mOutEditText.setOnEditorActionListener(mWriteListener);
+//        mOutEditText = (EditText) findViewById(R.id.edit_text_out);
+//        mOutEditText.setOnEditorActionListener(mWriteListener);
 
         // Initialize the send button with a listener that for click events
         mSendButton = (Button) findViewById(R.id.button_send);
@@ -131,7 +132,8 @@ public class BluetoothClient extends AppCompatActivity {
             public void onClick(View v) {
                 // Send a message using content of the edit text widget
                 TextView view = (TextView) findViewById(R.id.edit_text_out);
-                String message = view.getText().toString();
+//                String message = view.getText().toString();
+                String message = "Test message";
                 sendMessage(message);
             }
         });
@@ -140,7 +142,7 @@ public class BluetoothClient extends AppCompatActivity {
         mClientService = new BluetoothClientService(this, mHandler);
 
         // Initialize the buffer for outgoing messages
-        mOutStringBuffer = new StringBuffer("");
+//        mOutStringBuffer = new StringBuffer("");
     }
 
     @Override
@@ -191,8 +193,8 @@ public class BluetoothClient extends AppCompatActivity {
             mClientService.write(send);
 
             // Reset out string buffer to zero and clear the edit text field
-            mOutStringBuffer.setLength(0);
-            mOutEditText.setText(mOutStringBuffer);
+//            mOutStringBuffer.setLength(0);
+//            mOutEditText.setText(mOutStringBuffer);
         }
     }
 
@@ -225,27 +227,27 @@ public class BluetoothClient extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             switch (msg.what) {
-                case MESSAGE_STATE_CHANGE:
-                    if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
-                    switch (msg.arg1) {
-                        case BluetoothClientService.STATE_CONNECTED:
-//                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
-                            mConversationArrayAdapter.clear();
-                            break;
-                        case BluetoothClientService.STATE_CONNECTING:
-                            setStatus(R.string.title_connecting);
-                            break;
-                        case BluetoothClientService.STATE_LISTEN:
-                        case BluetoothClientService.STATE_NONE:
-//                            setStatus(R.string.title_not_connected);
-                            break;
-                    }
-                    break;
+//                case MESSAGE_STATE_CHANGE:
+//                    if(D) Log.i(TAG, "MESSAGE_STATE_CHANGE: " + msg.arg1);
+//                    switch (msg.arg1) {
+//                        case BluetoothClientService.STATE_CONNECTED:
+////                            setStatus(getString(R.string.title_connected_to, mConnectedDeviceName));
+//                            mConversationArrayAdapter.clear();
+//                            break;
+//                        case BluetoothClientService.STATE_CONNECTING:
+//                            setStatus(R.string.title_connecting);
+//                            break;
+//                        case BluetoothClientService.STATE_LISTEN:
+//                        case BluetoothClientService.STATE_NONE:
+////                            setStatus(R.string.title_not_connected);
+//                            break;
+//                    }
+//                    break;
                 case MESSAGE_WRITE:
                     byte[] writeBuf = (byte[]) msg.obj;
                     // construct a string from the buffer
                     String writeMessage = new String(writeBuf);
-                    mConversationArrayAdapter.add("Me:  " + writeMessage);
+//                    mConversationArrayAdapter.add("Me:  " + writeMessage);
                     break;
                 case MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
@@ -286,7 +288,7 @@ public class BluetoothClient extends AppCompatActivity {
                 // When the request to enable Bluetooth returns
                 if (resultCode == Activity.RESULT_OK) {
                     // Bluetooth is now enabled, so set up a chat session
-                    setupChat();
+                    setupConnection();
                 } else {
                     // User did not enable Bluetooth or an error occurred
                     Log.d(TAG, "BT not enabled");
