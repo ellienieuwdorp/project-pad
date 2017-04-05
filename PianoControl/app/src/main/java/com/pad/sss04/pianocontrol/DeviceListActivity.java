@@ -57,6 +57,8 @@ public class DeviceListActivity extends AppCompatActivity {
             }
         });
 
+        setTitle("Devices");
+
         // Initialize array adapters. One for already paired devices and
         // one for newly discovered devices
         mPairedDevicesArrayAdapter = new ArrayAdapter<>(this, R.layout.device_name);
@@ -71,7 +73,6 @@ public class DeviceListActivity extends AppCompatActivity {
         ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
         newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
         newDevicesListView.setOnItemClickListener(mDeviceClickListener);
-
 
 
         // Get the local Bluetooth adapter
@@ -101,8 +102,12 @@ public class DeviceListActivity extends AppCompatActivity {
             mBtAdapter.cancelDiscovery();
         }
 
-//        // Unregister broadcast listeners
-        this.unregisterReceiver(mReceiver);
+        // Unregister broadcast listeners
+        try {
+            this.unregisterReceiver(mReceiver);
+        } catch (IllegalArgumentException e) {
+
+        }
     }
 
     /**
@@ -110,13 +115,11 @@ public class DeviceListActivity extends AppCompatActivity {
      */
     private void doDiscovery() {
         if (D) Log.d(TAG, "doDiscovery()");
-        ActivityCompat.requestPermissions(DeviceListActivity.this,
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
-
-        checkBTPermissions();
 
         // Indicate scanning in the title
         setTitle(R.string.scanning);
+
+        checkBTPermissions();
 
         // Turn on sub-title for new devices
         findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
@@ -161,16 +164,16 @@ public class DeviceListActivity extends AppCompatActivity {
     };
 
     public void checkBTPermissions() {
-//        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
-//            int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
-//            permissionCheck += this.checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
-//            if (permissionCheck != 0) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
+            int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
+            permissionCheck += this.checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
+            if (permissionCheck != 0) {
 
                 this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
-//            }
-//        }else{
-//            Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
-//        }
+            }
+        } else {
+            Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
+        }
     }
 
     // The BroadcastReceiver that listens for discovered devices and

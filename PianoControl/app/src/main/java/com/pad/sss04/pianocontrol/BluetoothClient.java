@@ -200,7 +200,11 @@ public class BluetoothClient extends AppCompatActivity {
         String address = data.getExtras()
                 .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
         // Get the BluetoothDevice object
+        if (address.equals(" have been paired")) {
+            return;
+        }
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
+
         // Attempt to connect to the device
         mClientService.connect(device, secure);
     }

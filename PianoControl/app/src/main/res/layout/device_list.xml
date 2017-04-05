@@ -19,6 +19,13 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
+    <TextView
+        android:id="@+id/title_none_paired"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/none_paired"
+        android:visibility="gone" />
+
     <TextView android:id="@+id/title_paired_devices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,9 +38,8 @@
 
     <ListView
         android:id="@+id/paired_devices"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="0.99" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <TextView android:id="@+id/title_new_devices"
         android:layout_width="match_parent"
@@ -48,7 +54,8 @@
     <ListView
         android:id="@+id/new_devices"
         android:layout_width="match_parent"
-        android:layout_height="162dp" />
+        android:layout_height="wrap_content"
+        android:layout_weight="0.90" />
 
     <Button android:id="@+id/button_scan"
         android:layout_width="match_parent"
