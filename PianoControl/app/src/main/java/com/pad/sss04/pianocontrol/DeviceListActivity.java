@@ -1,5 +1,6 @@
 package com.pad.sss04.pianocontrol;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -7,7 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -45,19 +48,19 @@ public class DeviceListActivity extends AppCompatActivity {
         // Set result CANCELED in case the user backs out
         setResult(Activity.RESULT_CANCELED);
 
-//        // Initialize the button to perform device discovery
-//        Button scanButton = (Button) findViewById(R.id.button_scan);
-//        scanButton.setOnClickListener(new View.OnClickListener() {
-//            public void onClick(View v) {
-//                doDiscovery();
-//                v.setVisibility(View.GONE);
-//            }
-//        });
+        // Initialize the button to perform device discovery
+        Button scanButton = (Button) findViewById(R.id.button_scan);
+        scanButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                doDiscovery();
+                v.setVisibility(View.GONE);
+            }
+        });
 
         // Initialize array adapters. One for already paired devices and
         // one for newly discovered devices
         mPairedDevicesArrayAdapter = new ArrayAdapter<>(this, R.layout.device_name);
-//        mNewDevicesArrayAdapter = new ArrayAdapter<>(this, R.layout.device_name);
+        mNewDevicesArrayAdapter = new ArrayAdapter<>(this, R.layout.device_name);
 
         // Find and set up the ListView for paired devices
         ListView pairedListView = (ListView) findViewById(R.id.paired_devices);
@@ -65,17 +68,11 @@ public class DeviceListActivity extends AppCompatActivity {
         pairedListView.setOnItemClickListener(mDeviceClickListener);
 
         // Find and set up the ListView for newly discovered devices
-//        ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
-//        newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
-//        newDevicesListView.setOnItemClickListener(mDeviceClickListener);
+        ListView newDevicesListView = (ListView) findViewById(R.id.new_devices);
+        newDevicesListView.setAdapter(mNewDevicesArrayAdapter);
+        newDevicesListView.setOnItemClickListener(mDeviceClickListener);
 
-//        // Register for broadcasts when a device is discovered
-//        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-//        this.registerReceiver(mReceiver, filter);
-//
-//        // Register for broadcasts when discovery has finished
-//        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-//        this.registerReceiver(mReceiver, filter);
+
 
         // Get the local Bluetooth adapter
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -105,29 +102,43 @@ public class DeviceListActivity extends AppCompatActivity {
         }
 
 //        // Unregister broadcast listeners
-//        this.unregisterReceiver(mReceiver);
+        this.unregisterReceiver(mReceiver);
     }
 
     /**
      * Start device discover with the BluetoothAdapter
      */
-//    private void doDiscovery() {
-//        if (D) Log.d(TAG, "doDiscovery()");
-//
-//        // Indicate scanning in the title
-//        setTitle(R.string.scanning);
-//
-//        // Turn on sub-title for new devices
-////        findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
-//
-//        // If we're already discovering, stop it
-//        if (mBtAdapter.isDiscovering()) {
-//            mBtAdapter.cancelDiscovery();
-//        }
-//
-//        // Request discover from BluetoothAdapter
-//        mBtAdapter.startDiscovery();
-//    }
+    private void doDiscovery() {
+        if (D) Log.d(TAG, "doDiscovery()");
+        ActivityCompat.requestPermissions(DeviceListActivity.this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001);
+
+        checkBTPermissions();
+
+        // Indicate scanning in the title
+        setTitle(R.string.scanning);
+
+        // Turn on sub-title for new devices
+        findViewById(R.id.title_new_devices).setVisibility(View.VISIBLE);
+
+        // If we're already discovering, stop it
+        if (mBtAdapter.isDiscovering()) {
+            mBtAdapter.cancelDiscovery();
+        }
+
+        // Request discover from BluetoothAdapter
+        mBtAdapter.startDiscovery();
+
+        // Register for broadcasts when a device is discovered
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        this.registerReceiver(mReceiver, filter);
+
+        // Register for broadcasts when discovery has finished
+        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        this.registerReceiver(mReceiver, filter);
+        registerReceiver(mReceiver, filter);
+
+    }
 
     // The on-click listener for all devices in the ListViews
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
@@ -148,6 +159,19 @@ public class DeviceListActivity extends AppCompatActivity {
             finish();
         }
     };
+
+    public void checkBTPermissions() {
+//        if(Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP){
+//            int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
+//            permissionCheck += this.checkSelfPermission("Manifest.permission.ACCESS_COARSE_LOCATION");
+//            if (permissionCheck != 0) {
+
+                this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, 1001); //Any number
+//            }
+//        }else{
+//            Log.d(TAG, "checkBTPermissions: No need to check permissions. SDK version < LOLLIPOP.");
+//        }
+    }
 
     // The BroadcastReceiver that listens for discovered devices and
     // changes the title when discovery is finished
