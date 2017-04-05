@@ -43,6 +43,7 @@ public class BluetoothClient extends AppCompatActivity {
 
     // Layout Views
     private Button mSendButton;
+    private Button mConnectButton;
 
     // Name of the connected device
     private String mConnectedDeviceName = null;
@@ -66,6 +67,18 @@ public class BluetoothClient extends AppCompatActivity {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             finish();
         }
+
+
+
+        mConnectButton = (Button) findViewById(R.id.button_connect);
+        mConnectButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent serverIntent = new Intent(BluetoothClient.this, DeviceListActivity.class);
+                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+            }
+        });
+
     }
 
     @Override
@@ -104,8 +117,9 @@ public class BluetoothClient extends AppCompatActivity {
     private void setupConnection() {
         Log.d(TAG, "setupConnection()");
 
-        // Initialize the send button with a listener that for click events
         mSendButton = (Button) findViewById(R.id.button_send);
+        mSendButton.setVisibility(View.VISIBLE);
+        // Initialize the send button with a listener that for click events
         mSendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Send a test message
@@ -127,16 +141,6 @@ public class BluetoothClient extends AppCompatActivity {
         if (D) Log.e(TAG, "--- ON DESTROY ---");
     }
 
-    private void ensureDiscoverable() {
-        if (D) Log.d(TAG, "ensure discoverable");
-        if (mBluetoothAdapter.getScanMode() !=
-                BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE) {
-            Intent discoverableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-            startActivity(discoverableIntent);
-        }
-    }
-
     /**
      * Sends a message.
      *
@@ -148,29 +152,10 @@ public class BluetoothClient extends AppCompatActivity {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
-
-        // Check that there's actually something to send
-        if (message.length() > 0) {
-            // Get the message bytes and tell the BluetoothChatService to write
-            byte[] send = message.getBytes();
-            mClientService.write(send);
-        }
+        // Get the message bytes and tell the BluetoothChatService to write
+        byte[] send = message.getBytes();
+        mClientService.write(send);
     }
-
-    // The action listener for the EditText widget, to listen for the return key
-    private TextView.OnEditorActionListener mWriteListener =
-            new TextView.OnEditorActionListener() {
-                public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-                    // If the action is a key-up event on the return key, send the message
-                    if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
-                        String message = view.getText().toString();
-                        sendMessage(message);
-                    }
-                    if (D) Log.i(TAG, "END onEditorAction");
-                    return true;
-                }
-            };
-
 
     // The Handler that gets information back from the BluetoothChatService
     private final Handler mHandler = new Handler() {
@@ -190,12 +175,6 @@ public class BluetoothClient extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (D) Log.d(TAG, "onActivityResult " + resultCode);
         switch (requestCode) {
-            case REQUEST_CONNECT_DEVICE_SECURE:
-                // When DeviceListActivity returns with a device to connect
-                if (resultCode == Activity.RESULT_OK) {
-                    connectDevice(data, true);
-                }
-                break;
             case REQUEST_CONNECT_DEVICE_INSECURE:
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
@@ -226,32 +205,4 @@ public class BluetoothClient extends AppCompatActivity {
         mClientService.connect(device, secure);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        Intent serverIntent;
-        switch (item.getItemId()) {
-//            case R.id.secure_connect_scan:
-//                // Launch the DeviceListActivity to see devices and do scan
-//                serverIntent = new Intent(this, DeviceListActivity.class);
-//                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_SECURE);
-//                return true;
-            case R.id.connect_scan:
-                // Launch the DeviceListActivity to see devices and do scan
-                serverIntent = new Intent(this, DeviceListActivity.class);
-                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
-                return true;
-//            case R.id.discoverable:
-//                // Ensure this device is discoverable by others
-//                ensureDiscoverable();
-//                return true;
-        }
-        return false;
-    }
 }
