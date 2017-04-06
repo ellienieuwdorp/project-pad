@@ -9,14 +9,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class BluetoothClient extends AppCompatActivity {
@@ -67,8 +61,6 @@ public class BluetoothClient extends AppCompatActivity {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             finish();
         }
-
-
 
         mConnectButton = (Button) findViewById(R.id.button_connect);
         mConnectButton.setOnClickListener(new View.OnClickListener() {
