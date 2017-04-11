@@ -30,35 +30,33 @@ while (1 < 10):
                 print('2 pressed')
 
         if button3.is_pressed == False:
-                button3Boolean = True  
+                button3Boolean = True
                 print('3 pressed')
-                
+
         if button4.is_pressed == False:
                 button4Boolean = True
                 print('4 pressed')
-                
+
         if button5.is_pressed == False:
-                button5Boolean = True  
+                button5Boolean = True
                 print('5 pressed')
-        
+
         if (button1 == True):
                 print('pressed button 1')
                 button1 = False
-            
+
         if button2 == True:
                 print('pressed button 2')
                 button2 = False
-            
+
         if button3 == True:
                 print('pressed button 3')
                 button3 = False
-    
+
         if button4 == True:
                 print('pressed button 4')
                 button4 = False
-    
+
         if button5 == True:
                 print('pressed button 5')
-                button5 = False    
-
-   
+                button5 = False

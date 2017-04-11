@@ -7,11 +7,12 @@ def start():
     pygame.mixer.music.set_volume(1.0)
 
 def playMusic(name):
-    pygame.mixer.music.load(file)
+    pygame.mixer.music.load(name)
     pygame.mixer.music.play()
 
-def fadeout():
-    pygame.mixer.music.fadeout(2000)
+# num is in milliseconds 
+def fadeout(num):
+    pygame.mixer.music.fadeout(num)
 
 def isPlaying():
     return pygame.mixer.music.get_busy()
