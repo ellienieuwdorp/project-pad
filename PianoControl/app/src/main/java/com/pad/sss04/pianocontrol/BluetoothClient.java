@@ -55,7 +55,6 @@ public class BluetoothClient extends AppCompatActivity {
     // Member object for the chat services
     private BluetoothClientService mClientService = null;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,9 +64,8 @@ public class BluetoothClient extends AppCompatActivity {
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
+        // Tries the connection and connect with the remembered device when found
         tryConnection();
-
-
 
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
@@ -75,6 +73,7 @@ public class BluetoothClient extends AppCompatActivity {
             finish();
         }
 
+        // Create the connect button with the connection functionality
         mConnectButton = (Button) findViewById(R.id.button_connect);
         mConnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,9 +103,6 @@ public class BluetoothClient extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if (D) Log.e(TAG, "++ ON START ++");
-
-        // Set the preferences to the designated file
-        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
 
         // If BT is not on, request that it be enabled.
         // setupConnection() will then be called during onActivityResult
@@ -139,9 +135,9 @@ public class BluetoothClient extends AppCompatActivity {
     private void setupConnection() {
         Log.d(TAG, "setupConnection()");
 
+        // Initialize the send button with a listener that for click events
         mSendButton = (Button) findViewById(R.id.button_send);
         mSendButton.setVisibility(View.VISIBLE);
-        // Initialize the send button with a listener that for click events
         mSendButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Send a test message
@@ -165,7 +161,6 @@ public class BluetoothClient extends AppCompatActivity {
 
     /**
      * Sends a message.
-     *
      * @param message A string of text to send.
      */
     private void sendMessage(String message) {
