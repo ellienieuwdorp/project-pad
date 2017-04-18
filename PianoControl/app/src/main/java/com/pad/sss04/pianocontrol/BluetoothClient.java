@@ -62,6 +62,9 @@ public class BluetoothClient extends AppCompatActivity {
         setContentView(R.layout.main);
         if (D) Log.e(TAG, "+++ ON CREATE +++");
 
+        // Get local Bluetooth adapter
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
         // Get the sharedPreferences and set the MAC address when it exists
         sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         preferenceEditor = sharedPreferences.edit();
@@ -69,13 +72,13 @@ public class BluetoothClient extends AppCompatActivity {
 
         // Connect with the remembered device when it exists
         if(prefMACAddress != null) {
+            setupConnection();
             BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
             mClientService.connect(device, true);
             Toast.makeText(BluetoothClient.this, "Aardappels van Willem", Toast.LENGTH_LONG).show();
         }
 
-        // Get local Bluetooth adapter
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
 
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
