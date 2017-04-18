@@ -235,3 +235,4 @@ public class BluetoothClient extends AppCompatActivity {
         mClientService.connect(device, secure);
     }
 }
+
