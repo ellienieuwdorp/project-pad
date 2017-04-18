@@ -304,29 +304,29 @@ public class BluetoothClientService {
             mmOutStream = tmpOut;
         }
 
-//        public void run() {
-//            Log.i(TAG, "BEGIN mConnectedThread");
-//            byte[] buffer = new byte[1024];
-//            int bytes;
-//
-//            // Keep listening to the InputStream while connected
-//            while (true) {
-//                try {
-//                    // Read from the InputStream
-//                    bytes = mmInStream.read(buffer);
-//
-//                    // Send the obtained bytes to the UI Activity
-////                    mHandler.obtainMessage(BluetoothClient.MESSAGE_READ, bytes, -1, buffer)
-////                            .sendToTarget();
-//                } catch (IOException e) {
-//                    Log.e(TAG, "disconnected", e);
-//                    connectionLost();
-//                    // Start the service over to restart listening mode
-//                    BluetoothClientService.this.start();
-//                    break;
-//                }
-//            }
-//        }
+        public void run() {
+            Log.i(TAG, "BEGIN mConnectedThread");
+            byte[] buffer = new byte[1024];
+            int bytes;
+
+            // Keep listening to the InputStream while connected
+            while (true) {
+                try {
+                    // Read from the InputStream
+                    bytes = mmInStream.read(buffer);
+
+                    // Send the obtained bytes to the UI Activity
+                    mHandler.obtainMessage(BluetoothClient.MESSAGE_READ, bytes, -1, buffer)
+                            .sendToTarget();
+                } catch (IOException e) {
+                    Log.e(TAG, "disconnected", e);
+                    connectionLost();
+                    // Start the service over to restart listening mode
+                    BluetoothClientService.this.start();
+                    break;
+                }
+            }
+        }
 
         /**
          * Write to the connected OutStream.
@@ -337,8 +337,8 @@ public class BluetoothClientService {
                 mmOutStream.write(buffer);
 
                 // Share the sent message back to the UI Activity
-//                mHandler.obtainMessage(BluetoothClient.MESSAGE_WRITE, -1, -1, buffer)
-//                        .sendToTarget();
+                mHandler.obtainMessage(BluetoothClient.MESSAGE_WRITE, -1, -1, buffer)
+                        .sendToTarget();
             } catch (IOException e) {
                 Log.e(TAG, "Exception during write", e);
             }
