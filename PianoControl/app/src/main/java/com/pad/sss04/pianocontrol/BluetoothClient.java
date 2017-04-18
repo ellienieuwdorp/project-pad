@@ -3,7 +3,9 @@ package com.pad.sss04.pianocontrol;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -20,6 +22,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class BluetoothClient extends AppCompatActivity {
+
+    // Shared preferences save/load functionality
+    private static final String MY_PREFERENCES = "My_Preferences";
+    private static SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor preferenceEditor;
+    private static String prefMACAddress = null;
+    private static String prefMACkey = "prefMAC";
 
     // Debugging
     private static final String TAG = "BluetoothClient";
@@ -59,6 +68,18 @@ public class BluetoothClient extends AppCompatActivity {
         setContentView(R.layout.main);
         if (D) Log.e(TAG, "+++ ON CREATE +++");
 
+        // Get the sharedPreferences and set the MAC address when it exists
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+        preferenceEditor = sharedPreferences.edit();
+        prefMACAddress = sharedPreferences.getString(prefMACkey, null);
+
+        // Connect with the remembered device when it exists
+        if(prefMACAddress != null) {
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
+            mClientService.connect(device, true);
+            Toast.makeText(BluetoothClient.this, "Aardappels van Willem", Toast.LENGTH_LONG).show();
+        }
+
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -67,8 +88,6 @@ public class BluetoothClient extends AppCompatActivity {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
             finish();
         }
-
-
 
         mConnectButton = (Button) findViewById(R.id.button_connect);
         mConnectButton.setOnClickListener(new View.OnClickListener() {
@@ -85,6 +104,9 @@ public class BluetoothClient extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if (D) Log.e(TAG, "++ ON START ++");
+
+        // Set the preferences to the designated file
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
 
         // If BT is not on, request that it be enabled.
         // setupConnection() will then be called during onActivityResult
@@ -199,14 +221,19 @@ public class BluetoothClient extends AppCompatActivity {
         // Get the device MAC address
         String address = data.getExtras()
                 .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
+
+        // Set the preferences MAC address to the current fetched address and apply it
+        prefMACAddress = address;
+        preferenceEditor.putString(prefMACkey, prefMACAddress);
+        preferenceEditor.apply();
+
         // Get the BluetoothDevice object
         if (address.equals(" have been paired")) {
-            return;
+            return; //Lol heel nice dit
         }
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 
         // Attempt to connect to the device
         mClientService.connect(device, secure);
     }
-
 }
