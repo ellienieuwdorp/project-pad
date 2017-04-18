@@ -65,18 +65,7 @@ public class BluetoothClient extends AppCompatActivity {
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        // Get the sharedPreferences and set the MAC address when it exists
-        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
-        preferenceEditor = sharedPreferences.edit();
-        prefMACAddress = sharedPreferences.getString(prefMACkey, null);
-
-        // Connect with the remembered device when it exists
-        if(prefMACAddress != null) {
-            setupConnection();
-            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
-            mClientService.connect(device, true);
-            Toast.makeText(BluetoothClient.this, "Aardappels van Willem", Toast.LENGTH_LONG).show();
-        }
+        tryConnection();
 
 
 
@@ -95,6 +84,20 @@ public class BluetoothClient extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void tryConnection() {
+        // Get the sharedPreferences and set the MAC address when it exists
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);;
+        prefMACAddress = sharedPreferences.getString(prefMACkey, null);
+
+        // Connect with the remembered device when it exists
+        if(prefMACAddress != null) {
+            setupConnection();
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
+            mClientService.connect(device, true);
+            Toast.makeText(BluetoothClient.this, "Aardappels van Willem", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -220,14 +223,17 @@ public class BluetoothClient extends AppCompatActivity {
                 .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
 
         // Set the preferences MAC address to the current fetched address and apply it
+        preferenceEditor = sharedPreferences.edit();
         prefMACAddress = address;
         preferenceEditor.putString(prefMACkey, prefMACAddress);
         preferenceEditor.apply();
 
-        // Get the BluetoothDevice object
+        // TODO - this but better
         if (address.equals(" have been paired")) {
-            return; //Lol heel nice dit
+            return;
         }
+
+        // Get the BluetoothDevice object
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 
         // Attempt to connect to the device
