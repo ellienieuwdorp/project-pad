@@ -87,7 +87,7 @@ public class BluetoothClient extends AppCompatActivity {
 
     private void tryConnection() {
         // Get the sharedPreferences and set the MAC address when it exists
-        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);;
+        sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         prefMACAddress = sharedPreferences.getString(prefMACkey, null);
 
         // Connect with the remembered device when it exists
@@ -95,7 +95,8 @@ public class BluetoothClient extends AppCompatActivity {
             setupConnection();
             BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
             mClientService.connect(device, true);
-            Toast.makeText(BluetoothClient.this, "Aardappels van Willem", Toast.LENGTH_LONG).show();
+        } else if (prefMACAddress == null) {
+            Toast.makeText(BluetoothClient.this, "Could not find toy, please manually connect to the toy.", Toast.LENGTH_LONG).show();
         }
     }
 
