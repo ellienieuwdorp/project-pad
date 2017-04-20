@@ -8,6 +8,9 @@
     <string name="title_connecting">connecting…</string>
     <string name="title_connected_to">connected to device</string>
     <string name="title_not_connected">not connected</string>
+    <string name="could_not_find_toy">Could not find toy, please manually connect to the toy.</string>
+    <string name="connected_to">Connected to </string>
+    <string name="bluetooth_unavailable">Bluetooth is not available.</string>
 
     <!--  DeviceListActivity -->
     <string name="scanning">Scanning for devices…</string>
@@ -18,7 +21,4 @@
     <string name="title_other_devices">Other Available Devices</string>
     <string name="button_scan">Scan for other devices</string>
 
-    <!-- Options Menu -->
-    <string name="connect">Connect a device</string>
-    <string name="discoverable">Make discoverable</string>
 </resources>

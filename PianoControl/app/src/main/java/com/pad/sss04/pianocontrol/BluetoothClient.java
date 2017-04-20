@@ -69,7 +69,7 @@ public class BluetoothClient extends AppCompatActivity {
 
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.bluetooth_unavailable, Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -96,7 +96,7 @@ public class BluetoothClient extends AppCompatActivity {
             BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
             mClientService.connect(device, true);
         } else if (prefMACAddress == null) {
-            Toast.makeText(BluetoothClient.this, "Could not find toy, please manually connect to the toy.", Toast.LENGTH_LONG).show();
+            Toast.makeText(BluetoothClient.this, R.string.could_not_find_toy, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -183,7 +183,7 @@ public class BluetoothClient extends AppCompatActivity {
                 case MESSAGE_DEVICE_NAME:
                     // Display connection confirmation
                     mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
-                    Toast.makeText(getApplicationContext(), "Connected to "
+                    Toast.makeText(getApplicationContext(), R.string.connected_to
                             + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     break;
                 case MESSAGE_TOAST:
