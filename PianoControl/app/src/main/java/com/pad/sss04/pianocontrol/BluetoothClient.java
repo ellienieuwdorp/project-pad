@@ -64,14 +64,14 @@ public class BluetoothClient extends AppCompatActivity {
         // Get local Bluetooth adapter
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        // Tries the connection and connect with the remembered device when found
-        tryConnection();
-
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, R.string.bluetooth_unavailable, Toast.LENGTH_LONG).show();
             finish();
         }
+
+        // Tries the connection and connect with the remembered device when found
+        tryConnection();
 
         // Create the connect button with the connection functionality
         mConnectButton = (Button) findViewById(R.id.button_connect);
