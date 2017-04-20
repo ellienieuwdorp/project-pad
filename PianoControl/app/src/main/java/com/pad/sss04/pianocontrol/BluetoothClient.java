@@ -147,7 +147,7 @@ public class BluetoothClient extends AppCompatActivity {
         });
 
         // Initialize the BluetoothChatService to perform bluetooth connections
-        mClientService = new BluetoothClientService(this, mHandler);
+        mClientService = new BluetoothClientService(mHandler);
 
     }
 
