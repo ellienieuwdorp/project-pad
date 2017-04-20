@@ -3,18 +3,15 @@
 
     <!--  BluetoothClient -->
     <string name="send">Send</string>
-    <string name="not_connected">You are not connected to a device</string>
+    <string name="not_connected">You are not connected to a device.</string>
     <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Closing app.</string>
-    <string name="title_connecting">connecting…</string>
-    <string name="title_connected_to">connected to device</string>
-    <string name="title_not_connected">not connected</string>
     <string name="could_not_find_toy">Could not find toy, please manually connect to the toy.</string>
     <string name="connected_to">Connected to </string>
     <string name="bluetooth_unavailable">Bluetooth is not available.</string>
 
     <!--  DeviceListActivity -->
     <string name="scanning">Scanning for devices…</string>
-    <string name="select_device">Select a device to connect</string>
+    <string name="select_device">Select a device to connect to:</string>
     <string name="none_paired">No devices have been paired</string>
     <string name="none_found">No devices found</string>
     <string name="title_paired_devices">Paired Devices</string>
