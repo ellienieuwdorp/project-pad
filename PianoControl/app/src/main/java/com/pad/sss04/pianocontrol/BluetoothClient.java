@@ -66,7 +66,6 @@ public class BluetoothClient extends AppCompatActivity {
 
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
-            Toast.makeText(this, R.string.bluetooth_unavailable, Toast.LENGTH_LONG).show();
             Toast.makeText(this, getString(R.string.bluetooth_unavailable), Toast.LENGTH_LONG).show();
             finish();
         }
@@ -97,7 +96,7 @@ public class BluetoothClient extends AppCompatActivity {
             BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
             mClientService.connect(device, true);
         } else if (prefMACAddress == null) {
-            Toast.makeText(BluetoothClient.this, R.string.could_not_find_toy, Toast.LENGTH_LONG).show();
+            Toast.makeText(BluetoothClient.this, getString(R.string.could_not_find_toy), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -168,7 +167,6 @@ public class BluetoothClient extends AppCompatActivity {
     private void sendMessage(String message) {
         // Check that we're actually connected before trying anything
         if (mClientService.getState() != BluetoothClientService.STATE_CONNECTED) {
-            Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;
         }
@@ -185,7 +183,7 @@ public class BluetoothClient extends AppCompatActivity {
                 case MESSAGE_DEVICE_NAME:
                     // Display connection confirmation
                     mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
-                    Toast.makeText(getApplicationContext(), R.string.connected_to
+                    Toast.makeText(getApplicationContext(), getString(R.string.connected_to)
                             + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     break;
                 case MESSAGE_TOAST:
@@ -213,7 +211,6 @@ public class BluetoothClient extends AppCompatActivity {
                 } else {
                     // User did not enable Bluetooth or an error occurred
                     Log.d(TAG, "BT not enabled");
-                    Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
                     Toast.makeText(this, getString(R.string.bt_not_enabled_leaving), Toast.LENGTH_SHORT).show();
                     finish();
                 }
