@@ -42,7 +42,7 @@ public class BluetoothClientService {
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
 
     /**
-     * Constructor. Prepares a new BluetoothChat session.
+     * Constructor. Prepares a new Bluetooth Connection session.
      * @param handler  A Handler to send messages back to the UI Activity
      */
     public BluetoothClientService(Handler handler) {
@@ -52,7 +52,7 @@ public class BluetoothClientService {
     }
 
     /**
-     * Set the current state of the chat connection
+     * Set the current state of the connection
      * @param state  An integer defining the current connection state
      */
     private synchronized void setState(int state) {

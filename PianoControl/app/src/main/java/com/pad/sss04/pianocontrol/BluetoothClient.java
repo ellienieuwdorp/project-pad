@@ -28,14 +28,14 @@ public class BluetoothClient extends AppCompatActivity {
     private static final String TAG = "BluetoothClient";
     private static final boolean D = true;
 
-    // Message types sent from the BluetoothChatService Handler
+    // Message types sent from the BluetoothClientService Handler
     public static final int MESSAGE_STATE_CHANGE = 1;
     public static final int MESSAGE_READ = 2;
     public static final int MESSAGE_WRITE = 3;
     public static final int MESSAGE_DEVICE_NAME = 4;
     public static final int MESSAGE_TOAST = 5;
 
-    // Key names received from the BluetoothChatService Handler
+    // Key names received from the BluetoothClientService Handler
     public static final String DEVICE_NAME = "device_name";
     public static final String TOAST = "toast";
 
@@ -52,7 +52,7 @@ public class BluetoothClient extends AppCompatActivity {
     private String mConnectedDeviceName = null;
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
-    // Member object for the chat services
+    // Member object for the client services
     private BluetoothClientService mClientService = null;
 
     @Override
@@ -109,7 +109,7 @@ public class BluetoothClient extends AppCompatActivity {
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the chat session
+            // Otherwise, setup the connection
         } else {
             if (mClientService == null) setupConnection();
         }
@@ -126,7 +126,7 @@ public class BluetoothClient extends AppCompatActivity {
         if (mClientService != null) {
             // Only if the state is STATE_NONE, do we know that we haven't started already
             if (mClientService.getState() == BluetoothClientService.STATE_NONE) {
-                // Start the Bluetooth chat services
+                // Start the Bluetooth connection services
                 mClientService.start();
             }
         }
@@ -146,7 +146,7 @@ public class BluetoothClient extends AppCompatActivity {
             }
         });
 
-        // Initialize the BluetoothChatService to perform bluetooth connections
+        // Initialize the BluetoothClientService to perform bluetooth connections
         mClientService = new BluetoothClientService(mHandler);
 
     }
@@ -154,7 +154,7 @@ public class BluetoothClient extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        // Stop the Bluetooth chat services
+        // Stop the Bluetooth connection services
         if (mClientService != null) mClientService.stop();
         if (D) Log.e(TAG, "--- ON DESTROY ---");
     }
@@ -169,12 +169,12 @@ public class BluetoothClient extends AppCompatActivity {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
             return;
         }
-        // Get the message bytes and tell the BluetoothChatService to write
+        // Get the message bytes and tell the BluetoothClientService to write
         byte[] send = message.getBytes();
         mClientService.write(send);
     }
 
-    // The Handler that gets information back from the BluetoothChatService
+    // The Handler that gets information back from the BluetoothClientService
     private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -205,7 +205,7 @@ public class BluetoothClient extends AppCompatActivity {
             case REQUEST_ENABLE_BT:
                 // When the request to enable Bluetooth returns
                 if (resultCode == Activity.RESULT_OK) {
-                    // Bluetooth is now enabled, so set up a chat session
+                    // Bluetooth is now enabled, so set the connection
                     setupConnection();
                 } else {
                     // User did not enable Bluetooth or an error occurred
