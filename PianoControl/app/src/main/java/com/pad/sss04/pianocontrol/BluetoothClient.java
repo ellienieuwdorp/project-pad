@@ -67,6 +67,7 @@ public class BluetoothClient extends AppCompatActivity {
         // If the adapter is null, then Bluetooth is not supported
         if (mBluetoothAdapter == null) {
             Toast.makeText(this, R.string.bluetooth_unavailable, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.bluetooth_unavailable), Toast.LENGTH_LONG).show();
             finish();
         }
 
@@ -168,6 +169,7 @@ public class BluetoothClient extends AppCompatActivity {
         // Check that we're actually connected before trying anything
         if (mClientService.getState() != BluetoothClientService.STATE_CONNECTED) {
             Toast.makeText(this, R.string.not_connected, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
             return;
         }
         // Get the message bytes and tell the BluetoothClientService to write
@@ -212,6 +214,7 @@ public class BluetoothClient extends AppCompatActivity {
                     // User did not enable Bluetooth or an error occurred
                     Log.d(TAG, "BT not enabled");
                     Toast.makeText(this, R.string.bt_not_enabled_leaving, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.bt_not_enabled_leaving), Toast.LENGTH_SHORT).show();
                     finish();
                 }
         }
