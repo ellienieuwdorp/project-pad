@@ -291,7 +291,7 @@ public class BluetoothClientService {
             try {
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
-                Log.e(TAG, "temp sockets not created", e);
+                Log.e(TAG, "temp socket not created", e);
             }
             mmOutStream = tmpOut;
         }
