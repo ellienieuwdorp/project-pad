@@ -184,7 +184,7 @@ public class BluetoothClient extends AppCompatActivity {
                     // Display connection confirmation
                     mConnectedDeviceName = msg.getData().getString(DEVICE_NAME);
                     Toast.makeText(getApplicationContext(), getString(R.string.connected_to)
-                            + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
+                            + " " + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     break;
                 case MESSAGE_TOAST:
                     Toast.makeText(getApplicationContext(), msg.getData().getString(TOAST),
