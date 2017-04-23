@@ -228,11 +228,6 @@ public class BluetoothClient extends AppCompatActivity {
         preferenceEditor.putString(prefMACkey, prefMACAddress);
         preferenceEditor.apply();
 
-        // TODO - this but better
-        if (address.equals(" have been paired")) {
-            return;
-        }
-
         // Get the BluetoothDevice object
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 
