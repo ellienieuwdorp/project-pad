@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PianoControl</string>
 
-    <!--  BluetoothClient -->
+    <!--  MainActivity -->
     <string name="send">Send</string>
     <string name="not_connected">You are not connected to a device.</string>
     <string name="bt_not_enabled_leaving">Bluetooth was not enabled. Closing app.</string>

@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class BluetoothClient extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     // Shared preferences save/load functionality
     private static final String MY_PREFERENCES = "My_Preferences";
@@ -25,7 +25,7 @@ public class BluetoothClient extends AppCompatActivity {
     private static String prefMACkey = "prefMAC";
 
     // Debugging
-    private static final String TAG = "BluetoothClient";
+    private static final String TAG = "MainActivity";
     private static final boolean D = true;
 
     // Message types sent from the BluetoothClientService Handler
@@ -58,7 +58,7 @@ public class BluetoothClient extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_main);
         if (D) Log.e(TAG, "+++ ON CREATE +++");
 
         // Get local Bluetooth adapter
@@ -78,7 +78,7 @@ public class BluetoothClient extends AppCompatActivity {
         mConnectButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent serverIntent = new Intent(BluetoothClient.this, DeviceListActivity.class);
+                Intent serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
             }
         });
@@ -96,7 +96,7 @@ public class BluetoothClient extends AppCompatActivity {
             BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
             mClientService.connect(device, true);
         } else if (prefMACAddress == null) {
-            Toast.makeText(BluetoothClient.this, getString(R.string.could_not_find_toy), Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, getString(R.string.could_not_find_toy), Toast.LENGTH_LONG).show();
         }
     }
 
