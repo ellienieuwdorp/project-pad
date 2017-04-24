@@ -3,12 +3,13 @@
     package="com.pad.sss04.pianocontrol">
 
     <uses-feature android:name="android.hardware.bluetooth" />
+
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.BLUETOOTH_PRIVILEGED" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -25,11 +26,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.pad.sss04.pianocontrol.DeviceListActivity"
-            android:theme="@style/Theme.AppCompat.Light.Dialog"
+            android:name=".DeviceListActivity"
             android:label="@string/app_name"
-            />
-    </application>
+            android:theme="@style/Theme.AppCompat.Light.Dialog" />
 
+        <service
+            android:name=".BluetoothClientService"
+            android:exported="false" />
+
+        <activity android:name=".ConnectedActivity"></activity>
+    </application>
 
 </manifest>
