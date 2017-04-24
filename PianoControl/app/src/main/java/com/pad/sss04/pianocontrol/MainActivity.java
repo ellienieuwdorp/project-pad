@@ -40,9 +40,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String TOAST = "toast";
 
     // Intent request codes
-    private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
-    private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
-    private static final int REQUEST_ENABLE_BT = 3;
+    private static final int REQUEST_CONNECT_DEVICE = 1;
+    private static final int REQUEST_ENABLE_BT = 2;
 
     // Layout Views
     private Button mSendButton;
@@ -79,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent serverIntent = new Intent(MainActivity.this, DeviceListActivity.class);
-                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE_INSECURE);
+                startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
             }
         });
 
@@ -94,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         if(prefMACAddress != null) {
             setupConnection();
             BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
-            mClientService.connect(device, true);
+            mClientService.connect(device);
         } else if (prefMACAddress == null) {
             Toast.makeText(MainActivity.this, getString(R.string.could_not_find_toy), Toast.LENGTH_LONG).show();
         }
@@ -197,10 +196,10 @@ public class MainActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (D) Log.d(TAG, "onActivityResult " + resultCode);
         switch (requestCode) {
-            case REQUEST_CONNECT_DEVICE_INSECURE:
+            case REQUEST_CONNECT_DEVICE:
                 // When DeviceListActivity returns with a device to connect
                 if (resultCode == Activity.RESULT_OK) {
-                    connectDevice(data, false);
+                    connectDevice(data);
                 }
                 break;
             case REQUEST_ENABLE_BT:
@@ -217,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void connectDevice(Intent data, boolean secure) {
+    private void connectDevice(Intent data) {
         // Get the device MAC address
         String address = data.getExtras()
                 .getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS);
@@ -232,7 +231,7 @@ public class MainActivity extends AppCompatActivity {
         BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
 
         // Attempt to connect to the device
-        mClientService.connect(device, secure);
+        mClientService.connect(device);
     }
 }
 
