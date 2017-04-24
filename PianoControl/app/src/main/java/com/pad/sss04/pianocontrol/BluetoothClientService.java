@@ -9,6 +9,7 @@ import android.os.Message;
 import android.util.Log;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
@@ -268,20 +269,43 @@ public class BluetoothClientService {
      */
     private class ConnectedThread extends Thread {
         private final BluetoothSocket mmSocket;
+        private final InputStream mmInStream;
         private final OutputStream mmOutStream;
 
         public ConnectedThread(BluetoothSocket socket) {
             Log.d(TAG, "create ConnectedThread");
             mmSocket = socket;
+            InputStream tmpIn = null;
             OutputStream tmpOut = null;
 
             // Get the BluetoothSocket input and output streams
             try {
+                tmpIn = socket.getInputStream();
                 tmpOut = socket.getOutputStream();
             } catch (IOException e) {
                 Log.e(TAG, "temp socket not created", e);
             }
+            mmInStream = tmpIn;
             mmOutStream = tmpOut;
+        }
+
+        public void run() {
+            Log.i(TAG, "BEGIN mConnectedThread");
+            byte[] buffer = new byte[1024];
+
+            // Keep listening to the InputStream while connected
+            while (true) {
+                try {
+                    // Read from the InputStream
+                    mmInStream.read(buffer);
+                } catch (IOException e) {
+                    Log.e(TAG, "disconnected", e);
+                    connectionLost();
+                    // Start the service over to restart listening mode
+                    BluetoothClientService.this.start();
+                    break;
+                }
+            }
         }
 
         /**
