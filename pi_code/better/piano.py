@@ -1,3 +1,8 @@
+#
+# Copyright @ 2017 Hamam Hadib
+# This program uses Python 3 exclusively
+#
+
 import pygame
 from gpiozero import Button
 

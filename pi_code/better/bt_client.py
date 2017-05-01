@@ -1,3 +1,8 @@
+#
+# Copyright @ 2017 Hamam Hadib
+# This program uses Python 3 exclusively
+#
+
 from bluetooth import *
 
 class BtClient(object):
@@ -43,3 +48,4 @@ class BtClient(object):
     def close_conn(self):
         self.client_sock.close()
         self.server_sock.close()
+        print("Bluetooth connection is closed")

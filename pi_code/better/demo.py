@@ -1,9 +1,15 @@
-# NOT TESTED!!
+#
+# Copyright @ 2017 Hamam Hadib
 # This program uses Python 3 exclusively
+#
 
+# NOT TESTED YET!
+
+#Modules
+import _thread
+# Classes
 from bt_client import BtClient
 from piano import Piano
-import _thread
 
 piano = Piano()
 bt_c = BtClient(piano)
