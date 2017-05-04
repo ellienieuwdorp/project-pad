@@ -3,10 +3,13 @@ package com.pad.sss04.pianocontrol;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
 
+    // Local Broadcast Receiver
+    private BroadcastReceiver mBroadcastReceiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
         // Tries the connection and connect with the remembered device when found
         tryConnection();
 
+        setupReceiver();
+
         // Create the connect button with the connection functionality
         mConnectButton = (Button) findViewById(R.id.buttonConnect);
         mConnectButton.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +74,30 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void setupReceiver() {
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    String ServiceMessage = extras.getString("ServiceMessage");
+                    if (ServiceMessage != null) {
+                        switch (ServiceMessage) {
+                            case "CONNECTED":
+                                Intent i = new Intent(MainActivity.this, ConnectedActivity.class);
+                                Toast.makeText(MainActivity.this, "Connection to the toy successful.", Toast.LENGTH_LONG).show();
+                                startActivity(i);
+                                break;
+                            case "CONNECTION_FAILED":
+                                Toast.makeText(MainActivity.this, "Connection failed.", Toast.LENGTH_LONG).show();
+                                break;
+                        }
+                    }
+                }
+            }
+        };
     }
 
     private void tryConnection() {
@@ -83,9 +114,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         if (D) Log.e(TAG, "++ ON START ++");
+        LocalBroadcastManager.getInstance(this).registerReceiver((mBroadcastReceiver),
+                new IntentFilter(BluetoothClientService.BLUETOOTH_RESULT)
+        );
 
         // If BT is not on, request that it be enabled.
         // setupConnection() will then be called during onActivityResult

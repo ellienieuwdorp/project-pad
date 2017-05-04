@@ -1,14 +1,20 @@
 package com.pad.sss04.pianocontrol;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 public class ConnectedActivity extends AppCompatActivity {
 
     private Button buttonSend;
+    private BroadcastReceiver mBroadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +34,41 @@ public class ConnectedActivity extends AppCompatActivity {
                 startService(i);
             }
         });
+
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Bundle extras = intent.getExtras();
+                if (extras != null) {
+                    String ServiceMessage = extras.getString("ServiceMessage");
+                    if (ServiceMessage != null) {
+                        switch (ServiceMessage) {
+                            case "DISCONNECTED":
+                                Toast.makeText(ConnectedActivity.this, "Connection to the toy has been lost.", Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(ConnectedActivity.this, MainActivity.class);
+                                startActivity(i);
+                                break;
+                        }
+                    }
+                }
+            }
+        };
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        LocalBroadcastManager.getInstance(this).registerReceiver((mBroadcastReceiver),
+                new IntentFilter(BluetoothClientService.BLUETOOTH_RESULT)
+        );
+    }
+
     @Override
     public void onBackPressed(){
 

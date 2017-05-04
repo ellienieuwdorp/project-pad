@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -38,12 +39,16 @@ public class BluetoothClientService extends Service {
     private ConnectThread mConnectThread;
     private ConnectedThread mConnectedThread;
     private int mState;
+    private LocalBroadcastManager mBroadcaster;
 
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
     public static final int STATE_LISTEN = 1;     // now listening for incoming connections
     public static final int STATE_CONNECTING = 2; // now initiating an outgoing connection
     public static final int STATE_CONNECTED = 3;  // now connected to a remote device
+
+    // Message constants
+    static final String BLUETOOTH_RESULT = "REQUEST_PROCESSED";
 
     /**
      * Constructor. Prepares a new Bluetooth Connection session.
@@ -66,8 +71,11 @@ public class BluetoothClientService extends Service {
     /**
      * Return the current connection state.
      */
-    public synchronized int getState() {
-        return mState;
+
+    @Override
+    public void onCreate() {
+        mBroadcaster = LocalBroadcastManager.getInstance(this);
+        super.onCreate();
     }
 
     /**
@@ -145,35 +153,17 @@ public class BluetoothClientService extends Service {
         mConnectedThread = new ConnectedThread(socket);
         mConnectedThread.start();
 
-        final String deviceName = device.getName();
-
-        createToast("Successfully connected to the toy.", Toast.LENGTH_LONG);
-        newActivity(ConnectedActivity.class);
+       // newActivity(ConnectedActivity.class);
+        sendMessage("CONNECTED");
 
         setState(STATE_CONNECTED);
 
     }
 
-    void createToast(final String msg, final int length) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Toast.makeText(getApplicationContext(), msg, length).show();
-            }
-        });
-    }
-
-    void newActivity(final Class mClass) {
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                Intent i = new Intent(BluetoothClientService.this, mClass);
-                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                startActivity(i);
-            }
-        });
+    void sendMessage(String message){
+        Intent intent = new Intent(BLUETOOTH_RESULT);
+        intent.putExtra("ServiceMessage", message);
+        mBroadcaster.sendBroadcast(intent);
     }
 
     /**
@@ -217,8 +207,7 @@ public class BluetoothClientService extends Service {
      * Indicate that the connection attempt failed and notify the UI Activity.
      */
     private void connectionFailed() {
-        createToast("Unable to connect to device", Toast.LENGTH_LONG);
-
+        sendMessage("CONNECTION_FAILED");
         // Start the service over to restart listening mode
         BluetoothClientService.this.start();
     }
@@ -227,8 +216,7 @@ public class BluetoothClientService extends Service {
      * Indicate that the connection was lost and notify the UI Activity.
      */
     private void connectionLost() {
-        createToast("Connection to device was lost", Toast.LENGTH_LONG);
-        newActivity(MainActivity.class);
+        sendMessage("DISCONNECTED");
         // Start the service over to restart listening mode
         BluetoothClientService.this.start();
     }
