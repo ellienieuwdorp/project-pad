@@ -1,2 +1,8 @@
 Setting up bluetooth and PyBluez on the RPI
 - https://gist.github.com/lexruee/fa2e55aab4380cf266fb
+
+Fixing whitespaces in python files
+	
+	pip install reindent
+	reindent -n file.py
+
