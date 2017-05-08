@@ -36,6 +36,7 @@ class BtClient(object):
                 while True:
                     data = self.client_sock.recv(1024)
                     if len(data) == 0: break
+                    data = data.decode("utf-8")
                     print("received [%s]" % data)
                     if data.rsplit(None, 1)[0] == "collection: ":
                         self.piano.set_collection(self.piano, data.rsplit(None, 1)[1])
