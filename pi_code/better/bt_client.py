@@ -35,10 +35,10 @@ class BtClient(object):
             try:
                 while True:
                     data = self.client_sock.recv(1024)
-                if len(data) == 0: break
-                print("received [%s]" % data)
-                if data.rsplit(None, 1)[0] == "collection: ":
-                    self.piano.set_collection(self.piano, data.rsplit(None, 1)[1])
+                    if len(data) == 0: break
+                    print("received [%s]" % data)
+                    if data.rsplit(None, 1)[0] == "collection: ":
+                        self.piano.set_collection(self.piano, data.rsplit(None, 1)[1])
             except IOError:
                 pass
 
