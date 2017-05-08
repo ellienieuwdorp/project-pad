@@ -3,8 +3,6 @@
 # This program uses Python 3 exclusively
 #
 
-# NOT TESTED YET!
-
 #Modules
 import _thread
 import atexit
