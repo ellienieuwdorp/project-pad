@@ -6,13 +6,10 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +48,7 @@ public class BluetoothClientService extends Service {
     static final String BLUETOOTH_RESULT = "REQUEST_PROCESSED";
 
     /**
-     * Constructor. Prepares a new Bluetooth Connection session.
+     * Constructor. Prepares a new Bluetooth Connection session. Services require a default constructor.
      */
     public BluetoothClientService() {
         mAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -229,21 +226,34 @@ public class BluetoothClientService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        if (intent != null) {
+
         Bundle extras = intent.getExtras();
 
         if (extras != null) {
 
             String address = extras.getString("address");
             if (address != null) {
-                BluetoothDevice device = mAdapter.getRemoteDevice(address);
-                connect(device);
+                try {
+                    BluetoothDevice device = mAdapter.getRemoteDevice(address);
+                    connect(device);
+                } catch (Exception e) {
+                    // i hate this bug
+                }
+
+            }
+        }
+            try {
+                String message = extras.getString("message");
+                if (message != null) {
+                    String msg = extras.getString("message");
+                    write(msg.getBytes());
+                }
+            } catch (Exception e){
+                // Catch a java nullpointerexception because idk
             }
 
-            String message = extras.getString("message");
-            if (message != null) {
-                String msg = extras.getString("message");
-                write(msg.getBytes());
-            }
 
         }
         return super.onStartCommand(intent, flags, startId);

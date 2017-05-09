@@ -159,11 +159,12 @@ public class DeviceListActivity extends AppCompatActivity {
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             } catch (Exception e) {
-                setResult(Activity.RESULT_CANCELED);
             }
         }
     };
 
+
+    // If Android API level is under Lollipop requesting location access is not necessary. This method checks for that.
     public void checkBtPermissions() {
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP) {
             int permissionCheck = this.checkSelfPermission("Manifest.permission.ACCESS_FINE_LOCATION");
