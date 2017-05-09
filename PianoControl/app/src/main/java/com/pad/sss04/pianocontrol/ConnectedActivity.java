@@ -15,6 +15,7 @@ public class ConnectedActivity extends AppCompatActivity {
 
     private Button buttonSend;
     private BroadcastReceiver mBroadcastReceiver;
+    private Button buttonCollections;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +54,19 @@ public class ConnectedActivity extends AppCompatActivity {
                 }
             }
         };
+
+
+        // button initialize
+        buttonCollections = (Button) findViewById(R.id.buttonCollections);
+        buttonCollections.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(ConnectedActivity.this, CollectionsActivity.class);
+                startActivity(i);
+
+            }
+        });
+
     }
 
     @Override

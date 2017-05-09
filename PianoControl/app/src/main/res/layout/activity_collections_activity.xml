@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.pad.sss04.pianocontrol.CollectionsActivity">
+
+    <Button
+        android:id="@+id/btnCow"
+        android:layout_width="wrap_content"
+        android:layout_height="92dp"
+        android:text="Cow"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnBurps"
+        app:layout_constraintTop_toBottomOf="@+id/btnPiano" />
+
+    <Button
+        android:id="@+id/btnFarts"
+        android:layout_width="wrap_content"
+        android:layout_height="92dp"
+        android:text="Farts "
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnPiano"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnSheep"
+        android:layout_width="wrap_content"
+        android:layout_height="93dp"
+        android:text="Sheep"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnBurps" />
+
+    <Button
+        android:id="@+id/btnPiano"
+        android:layout_width="wrap_content"
+        android:layout_height="93dp"
+        android:text="Piano"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnCow"
+        app:layout_constraintTop_toBottomOf="@+id/btnFarts" />
+
+    <Button
+        android:id="@+id/btnBurps"
+        android:layout_width="wrap_content"
+        android:layout_height="93dp"
+        android:text="Burps"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btnSheep"
+        app:layout_constraintTop_toBottomOf="@+id/btnCow" />
+</android.support.constraint.ConstraintLayout>
