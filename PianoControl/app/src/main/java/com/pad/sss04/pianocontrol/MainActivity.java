@@ -16,8 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import static android.R.attr.data;
-
 public class MainActivity extends AppCompatActivity {
 
     // Shared preferences save/load functionality
@@ -62,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         // Tries the connection and connect with the remembered device when found
         tryConnection();
 
+        // Sets up the receiver
         setupReceiver();
 
         // Create the connect button with the connection functionality
@@ -76,20 +75,26 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    // This method sets up the receiver to receive messages from the BluetoothClientService
     private void setupReceiver() {
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
+                // Get the data received from the broadcast
                 Bundle extras = intent.getExtras();
                 if (extras != null) {
+                    // Get the message from the data bundle
                     String ServiceMessage = extras.getString("ServiceMessage");
                     if (ServiceMessage != null) {
                         switch (ServiceMessage) {
+                            // If a new connection is made, go to a new activity and notify the user
                             case "CONNECTED":
                                 Intent i = new Intent(MainActivity.this, ConnectedActivity.class);
                                 Toast.makeText(MainActivity.this, "Connection to the toy successful.", Toast.LENGTH_LONG).show();
                                 startActivity(i);
                                 break;
+                            // Notify the user if the attempted connection failed
                             case "CONNECTION_FAILED":
                                 Toast.makeText(MainActivity.this, "Connection failed.", Toast.LENGTH_LONG).show();
                                 break;
@@ -100,22 +105,30 @@ public class MainActivity extends AppCompatActivity {
         };
     }
 
+    // This methods attempts to connect to a known device saved in sharedPreferences
     private void tryConnection() {
         // Get the sharedPreferences and set the MAC address when it exists
         sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
         prefMACAddress = sharedPreferences.getString(prefMACkey, null);
 
-        // Connect with the remembered device when it exists
-        if(prefMACAddress != null) {
-            setupConnection();
-            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
-            connectDevice(device.getAddress());
+        // Connect with the remembered device if it exists
+        try{
+            if(prefMACAddress != null) {
+                setupConnection();
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
+                connectDevice(device.getAddress());
+            }
+        } catch (Exception e) {
+            // Sometimes this fucks up
         }
+
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+
+        // Unregister receiver when it's not needed anymore
         LocalBroadcastManager.getInstance(this).unregisterReceiver(mBroadcastReceiver);
     }
 
@@ -123,6 +136,8 @@ public class MainActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         if (D) Log.e(TAG, "++ ON START ++");
+
+        // Register the receiver to the BluetoothClientService broadcaster
         LocalBroadcastManager.getInstance(this).registerReceiver((mBroadcastReceiver),
                 new IntentFilter(BluetoothClientService.BLUETOOTH_RESULT)
         );
@@ -132,8 +147,8 @@ public class MainActivity extends AppCompatActivity {
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the connection
         } else {
+            // Otherwise, setup the connection
             setupConnection();
         }
     }
