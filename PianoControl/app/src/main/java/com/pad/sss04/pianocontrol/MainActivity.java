@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Connect with the remembered device if it exists
         try{
-            if(prefMACAddress != null) {
+            if(prefMACAddress != null && mBluetoothAdapter.isEnabled()) {
                 setupConnection();
                 BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
                 connectDevice(device.getAddress());
@@ -178,6 +178,7 @@ public class MainActivity extends AppCompatActivity {
                 if (resultCode == Activity.RESULT_OK) {
                     // Bluetooth is now enabled, so set the connection
                     setupConnection();
+                    tryConnection();
                 } else {
                     // User did not enable Bluetooth or an error occurred
                     Log.d(TAG, "BT not enabled");
