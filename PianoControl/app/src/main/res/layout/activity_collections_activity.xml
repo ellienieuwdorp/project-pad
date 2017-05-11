@@ -4,27 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.pad.sss04.pianocontrol.CollectionsActivity">
+    tools:context="com.pad.sss04.pianocontrol.CollectionsActivity"
+    tools:layout_editor_absoluteY="81dp"
+    tools:layout_editor_absoluteX="0dp">
 
     <Button
         android:id="@+id/btnCow"
         android:layout_width="wrap_content"
         android:layout_height="92dp"
         android:text="Cow"
-        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="@+id/btnBurps"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnBurps"
-        app:layout_constraintTop_toBottomOf="@+id/btnPiano" />
+        android:layout_marginTop="51dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnFarts" />
 
     <Button
         android:id="@+id/btnFarts"
         android:layout_width="wrap_content"
         android:layout_height="92dp"
         android:text="Farts "
-        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="78dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnPiano"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintRight_toLeftOf="@+id/btnPiano" />
 
     <Button
         android:id="@+id/btnSheep"
@@ -33,18 +34,20 @@
         android:text="Sheep"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnCow"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnBurps" />
+        android:layout_marginBottom="8dp"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnPiano"
         android:layout_width="wrap_content"
         android:layout_height="93dp"
         android:text="Piano"
+        tools:layout_editor_absoluteY="78dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnCow"
-        app:layout_constraintTop_toBottomOf="@+id/btnFarts" />
+        app:layout_constraintLeft_toRightOf="@+id/btnFarts" />
 
     <Button
         android:id="@+id/btnBurps"
@@ -52,7 +55,7 @@
         android:layout_height="93dp"
         android:text="Burps"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/btnSheep"
-        app:layout_constraintTop_toBottomOf="@+id/btnCow" />
+        app:layout_constraintLeft_toRightOf="@+id/btnCow"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@+id/btnPiano" />
 </android.support.constraint.ConstraintLayout>
