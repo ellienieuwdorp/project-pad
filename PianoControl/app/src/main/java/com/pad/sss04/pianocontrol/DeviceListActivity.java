@@ -159,6 +159,7 @@ public class DeviceListActivity extends AppCompatActivity {
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     };

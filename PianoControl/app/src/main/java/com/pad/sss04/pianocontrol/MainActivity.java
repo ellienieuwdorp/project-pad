@@ -122,16 +122,11 @@ public class MainActivity extends AppCompatActivity {
         prefMACAddress = sharedPreferences.getString(prefMACkey, null);
 
         // Connect with the remembered device if it exists
-        try{
-            if(prefMACAddress != null && mBluetoothAdapter.isEnabled()) {
-                setupConnection();
-                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
-                connectDevice(device.getAddress());
-            }
-        } catch (Exception e) {
-            // Sometimes this fucks up
+        if (prefMACAddress != null && mBluetoothAdapter.isEnabled()) {
+            setupConnection();
+            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
+            connectDevice(device.getAddress());
         }
-
     }
 
     @Override
