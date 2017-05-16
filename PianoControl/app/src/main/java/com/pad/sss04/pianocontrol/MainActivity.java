@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.Collections;
+
 public class MainActivity extends AppCompatActivity {
 
     // Shared preferences save/load functionality
@@ -35,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Layout Views
     private Button mConnectButton;
+    private Button mFakeConnect;
 
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
@@ -63,6 +66,15 @@ public class MainActivity extends AppCompatActivity {
         // Sets up the receiver
         setupReceiver();
 
+        mFakeConnect = (Button) findViewById(R.id.buttonFake);
+        mFakeConnect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(MainActivity.this, CollectionsActivity.class);
+                startActivity(i);
+            }
+        });
+
         // Create the connect button with the connection functionality
         mConnectButton = (Button) findViewById(R.id.buttonConnect);
         mConnectButton.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                         switch (ServiceMessage) {
                             // If a new connection is made, go to a new activity and notify the user
                             case "CONNECTED":
-                                Intent i = new Intent(MainActivity.this, ConnectedActivity.class);
+                                Intent i = new Intent(MainActivity.this, CollectionsActivity.class);
                                 Toast.makeText(MainActivity.this, "Connection to the toy successful.", Toast.LENGTH_LONG).show();
                                 startActivity(i);
                                 break;
