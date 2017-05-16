@@ -2,10 +2,13 @@ package com.pad.sss04.pianocontrol;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,6 +18,13 @@ import android.widget.Button;
 import android.widget.Toast;
 
 public class CollectionsActivity extends AppCompatActivity {
+
+    // Shared preferences save/load functionality
+    private static final String MY_PREFERENCES = "My_Preferences";
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences.Editor preferenceEditor;
+    private static String prefMACkey = "prefMAC";
+
     // Declaration button in the activity
     private Button btnFarts;
     private Button btnPiano;
@@ -111,11 +121,24 @@ public class CollectionsActivity extends AppCompatActivity {
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.action_disconnect:
-                // TO-DO Close connection and go back to MainActivity
-                return true;
-            case R.id.action_forget:
-                // TO-DO Remove MAC address from sharedPrefs and close the connection and go back to MainActivity
-                return true;
+                new AlertDialog.Builder(this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Disconnecting from toy")
+                        .setMessage("Are you sure you want to disconnect?")
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                sharedPreferences = getSharedPreferences(MY_PREFERENCES, Context.MODE_PRIVATE);
+                                preferenceEditor = sharedPreferences.edit();
+                                preferenceEditor.putString(prefMACkey, null);
+                                preferenceEditor.apply();
+                                Intent i = new Intent(CollectionsActivity.this, BluetoothClientService.class);
+                                i.putExtra("disconnect", "disconnect");
+                                startService(i);
+                            }
+                        })
+                        .setNegativeButton("No", null)
+                        .show();
             default:
                 return super.onOptionsItemSelected(item);
         }

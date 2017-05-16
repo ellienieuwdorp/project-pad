@@ -75,6 +75,15 @@ public class BluetoothClientService extends Service {
         super.onCreate();
     }
 
+    public void disconnect() {
+        try {
+            mConnectedThread.disconnect();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        sendMessage("DISCONNECTED");
+    }
+
     /**
      * Start the client service. Specifically start AcceptThread to begin a
      * session in listening (server) mode. Called by the Activity onResume()
@@ -150,14 +159,14 @@ public class BluetoothClientService extends Service {
         mConnectedThread = new ConnectedThread(socket);
         mConnectedThread.start();
 
-       // newActivity(ConnectedActivity.class);
+        // newActivity(ConnectedActivity.class);
         sendMessage("CONNECTED");
 
         setState(STATE_CONNECTED);
 
     }
 
-    void sendMessage(String message){
+    void sendMessage(String message) {
         Intent intent = new Intent(BLUETOOTH_RESULT);
         intent.putExtra("ServiceMessage", message);
         mBroadcaster.sendBroadcast(intent);
@@ -226,35 +235,23 @@ public class BluetoothClientService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
         if (intent != null) {
-
-        Bundle extras = intent.getExtras();
-
-        if (extras != null) {
-
-            String address = extras.getString("address");
-            if (address != null) {
-                try {
+            Bundle extras = intent.getExtras();
+            if (extras != null) {
+                String address = extras.getString("address");
+                if (address != null) {
                     BluetoothDevice device = mAdapter.getRemoteDevice(address);
                     connect(device);
-                } catch (Exception e) {
-                    // i hate this bug
                 }
-
-            }
-        }
-            try {
                 String message = extras.getString("message");
                 if (message != null) {
-                    String msg = extras.getString("message");
-                    write(msg.getBytes());
+                    write(message.getBytes());
                 }
-            } catch (Exception e){
-                // Catch a java nullpointerexception because idk
+                String disconnect = extras.getString("disconnect");
+                if (disconnect != null) {
+                    disconnect();
+                }
             }
-
-
         }
         return super.onStartCommand(intent, flags, startId);
     }
@@ -354,6 +351,10 @@ public class BluetoothClientService extends Service {
             }
             mmInStream = tmpIn;
             mmOutStream = tmpOut;
+        }
+
+        public void disconnect() throws IOException {
+            mmSocket.close();
         }
 
         public void run() {

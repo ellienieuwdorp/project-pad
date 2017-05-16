@@ -4,13 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="nieuwdorp.luuk.bottombarpre.MainActivity">
     <item
-        android:id="@+id/action_forget"
-        android:orderInCategory="100"
-        android:title="Forget this toy"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/action_disconnect"
         android:orderInCategory="100"
         android:title="Disconnect"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_exit"
+        app:showAsAction="always" />
 </menu>

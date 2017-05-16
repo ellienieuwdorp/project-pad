@@ -34,7 +34,6 @@
             android:name=".BluetoothClientService"
             android:exported="false" />
 
-        <activity android:name=".ConnectedActivity" />
         <activity android:name=".CollectionsActivity"></activity>
     </application>
 

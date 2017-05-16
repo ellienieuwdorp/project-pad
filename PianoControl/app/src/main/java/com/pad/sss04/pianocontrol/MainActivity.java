@@ -16,8 +16,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.util.Collections;
-
 public class MainActivity extends AppCompatActivity {
 
     // Shared preferences save/load functionality
