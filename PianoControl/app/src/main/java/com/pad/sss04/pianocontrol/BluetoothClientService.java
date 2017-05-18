@@ -240,8 +240,13 @@ public class BluetoothClientService extends Service {
             if (extras != null) {
                 String address = extras.getString("address");
                 if (address != null) {
-                    BluetoothDevice device = mAdapter.getRemoteDevice(address);
-                    connect(device);
+                    try {
+                        BluetoothDevice device = mAdapter.getRemoteDevice(address);
+                        connect(device);
+                    } catch (IllegalArgumentException e){
+                        e.printStackTrace();
+                    }
+
                 }
                 String message = extras.getString("message");
                 if (message != null) {
