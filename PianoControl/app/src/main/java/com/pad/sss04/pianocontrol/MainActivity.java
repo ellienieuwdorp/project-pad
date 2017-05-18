@@ -33,9 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CONNECT_DEVICE = 1;
     private static final int REQUEST_ENABLE_BT = 2;
 
-    // Layout Views
+    // Button
     private Button mConnectButton;
-    private Button mFakeConnect;
 
     // Local Bluetooth adapter
     private BluetoothAdapter mBluetoothAdapter = null;
@@ -61,17 +60,8 @@ public class MainActivity extends AppCompatActivity {
         // Tries the connection and connect with the remembered device when found
         tryConnection();
 
-        // Sets up the receiver
+        // Sets up the broadcast receiver
         setupReceiver();
-
-        mFakeConnect = (Button) findViewById(R.id.buttonFake);
-        mFakeConnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, CollectionsActivity.class);
-                startActivity(i);
-            }
-        });
 
         // Create the connect button with the connection functionality
         mConnectButton = (Button) findViewById(R.id.buttonConnect);
