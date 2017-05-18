@@ -6,17 +6,22 @@
 import pygame
 from gpiozero import Button
 import os
+from subprocess import Popen
+
 class Piano(object):
     """docstring for Piano."""
 
     #the constructor of the piano class
     def __init__(self):
-    	#the pygame mixer is initialized 
+    	#the pygame mixer is initialized
         pygame.mixer.init()
         #the volume of the mixer is set to 1
         pygame.mixer.music.set_volume(1.0)
         #the gpio pins of the buttons are defined
         self.buttons = [Button(5), Button(6), Button(13), Button(19), Button(26)]
+
+        self.disc_btn = Button(22)
+        self.disc_btn.when_pressed = self.make_discoverable
         #the name of the collection used
         self.collection = "Farts"
 
@@ -24,10 +29,11 @@ class Piano(object):
 
         self.sounds = sorted(os.listdir(self.dir))
 
-    #this method plays a sound    
+    #this method plays a sound
     def play_sound(self, name):
         pygame.mixer.music.load(name)
         pygame.mixer.music.play()
+
     #this method fades out the sound over a specified amount of time
     def fadeout(self, num):
         pygame.mixer.music.fadeout(num)
@@ -42,6 +48,8 @@ class Piano(object):
         self.dir = "collections/{:s}/".format(self.collection)
         self.sounds = sorted(os.listdir(self.dir))
 
+    def make_discoverable():
+        process = subprocess.Popen(['./discoverable.sh'])
 
     #this method wait for the keys to be pressed and then plays
     #the sound associated with key and the collection used
