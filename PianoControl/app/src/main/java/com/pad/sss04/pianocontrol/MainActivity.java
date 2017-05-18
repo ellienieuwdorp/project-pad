@@ -14,8 +14,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.SeekBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -77,8 +75,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-
     }
 
 
@@ -120,8 +116,13 @@ public class MainActivity extends AppCompatActivity {
         // Connect with the remembered device if it exists
         if (prefMACAddress != null && mBluetoothAdapter.isEnabled()) {
             setupConnection();
-            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
-            connectDevice(device.getAddress());
+            try {
+                BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(prefMACAddress);
+                connectDevice(device.getAddress());
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            }
+
         }
     }
 
