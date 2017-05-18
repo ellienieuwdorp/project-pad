@@ -37,6 +37,7 @@ public class BluetoothClientService extends Service {
     private ConnectedThread mConnectedThread;
     private int mState;
     private LocalBroadcastManager mBroadcaster;
+    private boolean connected;
 
     // Constants that indicate the current connection state
     public static final int STATE_NONE = 0;       // we're doing nothing
@@ -161,7 +162,7 @@ public class BluetoothClientService extends Service {
 
         // newActivity(ConnectedActivity.class);
         sendMessage("CONNECTED");
-
+        connected = true;
         setState(STATE_CONNECTED);
 
     }
@@ -223,6 +224,7 @@ public class BluetoothClientService extends Service {
      */
     private void connectionLost() {
         sendMessage("DISCONNECTED");
+        connected = false;
         // Start the service over to restart listening mode
         BluetoothClientService.this.start();
     }
@@ -256,6 +258,12 @@ public class BluetoothClientService extends Service {
                 if (disconnect != null) {
                     disconnect();
                 }
+                String isConnected = extras.getString("isConnected");
+                if (isConnected != null){
+                    if (!isConnected()){
+                        sendMessage("DISCONNECTED");
+                    }
+                }
             }
         }
         return super.onStartCommand(intent, flags, startId);
@@ -265,6 +273,10 @@ public class BluetoothClientService extends Service {
     public void onDestroy() {
         stop();
         super.onDestroy();
+    }
+
+    public boolean isConnected(){
+        return connected;
     }
 
     /**

@@ -186,6 +186,9 @@ public class CollectionsActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
+        Intent i = new Intent(CollectionsActivity.this, BluetoothClientService.class);
+        i.putExtra("isConnected", "isConnected");
+        startService(i);
         LocalBroadcastManager.getInstance(this).registerReceiver((mBroadcastReceiver),
                 new IntentFilter(BluetoothClientService.BLUETOOTH_RESULT)
         );
