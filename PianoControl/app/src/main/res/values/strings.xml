@@ -8,6 +8,8 @@
     <string name="could_not_find_toy">Could not find toy, please manually connect to the toy.</string>
     <string name="connected_to">Connected to </string>
     <string name="bluetooth_unavailable">Bluetooth is not available.</string>
+    <string name="description_connect">Press the 'discoverable' button on the toy</string>
+
 
     <!--  DeviceListActivity -->
     <string name="scanning">Scanning for devices…</string>
