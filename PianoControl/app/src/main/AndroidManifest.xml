@@ -19,6 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".MainActivity">
+            android:screenOrientation="portrait"
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,13 +29,16 @@
         <activity
             android:name=".DeviceListActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.Dialog" />
 
         <service
             android:name=".BluetoothClientService"
             android:exported="false" />
 
-        <activity android:name=".CollectionsActivity"></activity>
+        <activity android:name=".CollectionsActivity">
+            android:screenOrientation="portrait"
+        </activity>
     </application>
 
 </manifest>
