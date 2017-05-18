@@ -16,6 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class CollectionsActivity extends AppCompatActivity {
@@ -32,6 +34,9 @@ public class CollectionsActivity extends AppCompatActivity {
     private Button btnCow;
     private Button btnBurps;
     private Button btnSheep;
+
+    private SeekBar volBar;
+    private TextView volText;
 
     boolean doubleBackToExitPressedOnce = false;
 
@@ -110,6 +115,31 @@ public class CollectionsActivity extends AppCompatActivity {
                 }
             }
         };
+
+        volBar = (SeekBar) findViewById(R.id.seekBar);
+        volText = (TextView) findViewById(R.id.textView);
+        volText.setText(String.valueOf(volBar.getProgress()));
+
+        volBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                volText.setText(String.valueOf(progress));
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                Intent i = new Intent(CollectionsActivity.this, BluetoothClientService.class);
+                String h = "volume: " + String.valueOf(seekBar.getProgress());
+                i.putExtra("message", h);
+                startService(i);
+            }
+        });
     }
 
     @Override

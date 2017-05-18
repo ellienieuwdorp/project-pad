@@ -14,6 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Local Broadcast Receiver
     private BroadcastReceiver mBroadcastReceiver;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(serverIntent, REQUEST_CONNECT_DEVICE);
             }
         });
+
+
+
 
     }
 

@@ -8,5 +8,5 @@ sudo hciconfig hci0 piscan
 sleep 60
 
 # disable the bluetooth interface
-sudo hciconfig hci0 noscan 
+sudo hciconfig hci0 noscan
 sudo hciconfig hci0 down
