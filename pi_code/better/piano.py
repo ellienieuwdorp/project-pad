@@ -48,6 +48,10 @@ class Piano(object):
         self.dir = "collections/{:s}/".format(self.collection)
         self.sounds = sorted(os.listdir(self.dir))
 
+    def set_volume(self,num):
+        num = int(num)/100.0
+        pygame.mixer.music.set_volume(num)
+
     def make_discoverable():
         process = Popen(['./discoverable.sh'])
 

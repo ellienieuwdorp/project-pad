@@ -38,8 +38,14 @@ class BtClient(object):
                     if len(data) == 0: break
                     data = data.decode("utf-8")
                     print("received [%s]" % data)
+
+                    data_arr = data.rsplit(None, 1)
+
                     if data.rsplit(None, 1)[0] == "collection: ":
-                        self.piano.set_collection(self.piano, data.rsplit(None, 1)[1])
+                        self.piano.set_collection(self.piano, data_arr[1])
+                    elif data.rsplit(None, 1)[0] == 'volume:':
+                        self.piano.set_volume(data_arr[1])
+
             except IOError:
                 pass
 
