@@ -49,7 +49,7 @@ class Piano(object):
         self.sounds = sorted(os.listdir(self.dir))
 
     def make_discoverable():
-        process = subprocess.Popen(['./discoverable.sh'])
+        process = Popen(['./discoverable.sh'])
 
     #this method wait for the keys to be pressed and then plays
     #the sound associated with key and the collection used
