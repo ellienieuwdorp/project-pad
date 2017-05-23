@@ -28,13 +28,12 @@ public class CollectionsActivity extends AppCompatActivity {
     private SharedPreferences.Editor preferenceEditor;
     private static String prefMACkey = "prefMAC";
 
-    // Declaration button in the activity
+    // Member fields
     private Button btnFarts;
     private Button btnPiano;
     private Button btnCow;
     private Button btnBurps;
     private Button btnSheep;
-
     private SeekBar volBar;
     private TextView volText;
 
@@ -47,6 +46,7 @@ public class CollectionsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_collections);
 
+        // Initialize buttons to switch the collection on the Raspberry pi.
         btnFarts = (Button) findViewById(R.id.btnFarts);
         btnFarts.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,6 +97,7 @@ public class CollectionsActivity extends AppCompatActivity {
             }
         });
 
+        // Register BroadcastReceiver to receive messages from the BluetoothClientService.
         mBroadcastReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -120,20 +121,20 @@ public class CollectionsActivity extends AppCompatActivity {
         volText = (TextView) findViewById(R.id.textView);
         volText.setText(String.valueOf(volBar.getProgress()));
 
+        // Set up the volume bar to send volume changes to the Raspberry pi.
         volBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                // Update text field based on current volume value.
                 volText.setText(String.valueOf(progress));
-
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) { }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                // Send the volume to the Raspberry pi as soon as the user stops touching the volume bar.
                 Intent i = new Intent(CollectionsActivity.this, BluetoothClientService.class);
                 String h = "volume: " + String.valueOf(seekBar.getProgress());
                 i.putExtra("message", h);
@@ -151,7 +152,7 @@ public class CollectionsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
+        // Initialize the disconnect button.
         switch (item.getItemId()) {
             case R.id.action_disconnect:
                 new AlertDialog.Builder(this)
@@ -194,6 +195,8 @@ public class CollectionsActivity extends AppCompatActivity {
         );
     }
 
+    // If the user presses back once don't exit the app immediately as sometimes it can be pressed accidentally.
+    // We also don't want the user to go back to the MainActivity whilst they're connected.
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
