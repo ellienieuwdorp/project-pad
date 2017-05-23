@@ -76,11 +76,13 @@ public class BluetoothClientService extends Service {
         super.onCreate();
     }
 
+    // Disconnect
     public void disconnect() {
         try {
             mConnectedThread.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
         sendMessage("DISCONNECTED");
     }
@@ -167,6 +169,7 @@ public class BluetoothClientService extends Service {
 
     }
 
+    // Sends a message to the UI using the broadcaster
     void sendMessage(String message) {
         Intent intent = new Intent(BLUETOOTH_RESULT);
         intent.putExtra("ServiceMessage", message);
@@ -219,9 +222,7 @@ public class BluetoothClientService extends Service {
         BluetoothClientService.this.start();
     }
 
-    /**
-     * Indicate that the connection was lost and notify the UI Activity.
-     */
+     // Indicate that the connection was lost and notify the UI Activity.
     private void connectionLost() {
         sendMessage("DISCONNECTED");
         connected = false;
@@ -229,12 +230,14 @@ public class BluetoothClientService extends Service {
         BluetoothClientService.this.start();
     }
 
+    // Method needed for service extension but which we don't use
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
+    // Method that gets executed when startService on this service is called.
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null) {
@@ -269,12 +272,13 @@ public class BluetoothClientService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
+    // Stop the bluetooth connection when the BluetoothClientService is destroyed.
     @Override
     public void onDestroy() {
         stop();
         super.onDestroy();
     }
-
+    // Returns if there's an active bluetooth connection.
     public boolean isConnected(){
         return connected;
     }
