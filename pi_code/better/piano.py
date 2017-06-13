@@ -17,13 +17,13 @@ class Piano(object):
         pygame.mixer.init()
         #the volume of the mixer is set to 1
         pygame.mixer.music.set_volume(1.0)
+        vol = os.system("amixer sset 'PCM' 80%")
         #the gpio pins of the buttons are defined
         self.buttons = [Button(5), Button(6), Button(13), Button(19), Button(26)]
 
         self.disc_btn = Button(22)
-        self.disc_btn.when_pressed = self.make_discoverable
         #the name of the collection used
-        self.collection = "Farts"
+        self.collection = "Piano"
 
         self.dir = "collections/{:s}/".format(self.collection)
 
@@ -49,16 +49,23 @@ class Piano(object):
         self.sounds = sorted(os.listdir(self.dir))
 
     def set_volume(self,num):
-        num = int(num)/100.0
-        pygame.mixer.music.set_volume(num)
+        num = int(num)
+        cmd = "amixer sset 'PCM' {}%".format(num)
+        vol = os.system(cmd)
 
-    def make_discoverable():
+        # pygame.mixer.music.set_volume(num)
+
+    def make_discoverable(self):
         process = Popen(['./discoverable.sh'])
+        print("the pi is made discoverable")
 
     #this method wait for the keys to be pressed and then plays
     #the sound associated with key and the collection used
     def keys(self):
         while True:
+            if self.disc_btn.is_pressed:
+                self.make_discoverable()
+                self.disc_btn.wait_for_release()
             # foreach-loop
             for btn in self.buttons:
                 if btn.is_pressed:

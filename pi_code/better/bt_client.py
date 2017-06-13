@@ -40,10 +40,11 @@ class BtClient(object):
                     print("received [%s]" % data)
 
                     data_arr = data.rsplit(None, 1)
-
-                    if data.rsplit(None, 1)[0] == "collection: ":
-                        self.piano.set_collection(self.piano, data_arr[1])
-                    elif data.rsplit(None, 1)[0] == 'volume:':
+                    print(data_arr)
+                    if data_arr[0].strip() == 'collection:':
+                        print("new collection: "+ data_arr[1])
+                        self.piano.set_collection(data_arr[1])
+                    elif data_arr[0].strip() == 'volume:':
                         self.piano.set_volume(data_arr[1])
 
             except IOError:
