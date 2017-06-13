@@ -1,8 +1,3 @@
-#
-# Copyright @ 2017 Hamam Hadib
-# This program uses Python 3 exclusively
-#
-
 from bluetooth import *
 
 class BtClient(object):
