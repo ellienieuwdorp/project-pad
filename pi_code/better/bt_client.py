@@ -17,7 +17,7 @@ class BtClient(object):
                            profiles = [ SERIAL_PORT_PROFILE ],
         #                   protocols = [ OBEX_UUID ]
                             )
-                            
+
         self.piano = piano
 
     # the most important function
@@ -32,6 +32,7 @@ class BtClient(object):
                 while True:
                     data = self.client_sock.recv(1024)
                     if len(data) == 0: break
+                    # converting from bytes to string
                     data = data.decode("utf-8")
                     print("received [%s]" % data)
 
