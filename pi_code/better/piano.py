@@ -4,19 +4,22 @@ import os
 from subprocess import Popen
 
 class Piano(object):
-    """docstring for Piano."""
 
     #the constructor of the piano class
     def __init__(self):
     	#the pygame mixer is initialized
         pygame.mixer.init()
+
         #the volume of the mixer is set to 1
         pygame.mixer.music.set_volume(1.0)
         vol = os.system("amixer sset 'PCM' 80%")
+
         #the gpio pins of the buttons are defined
         self.buttons = [Button(5), Button(6), Button(13), Button(19), Button(26)]
 
+        #dicoverable button
         self.disc_btn = Button(22)
+
         #the name of the collection used
         self.collection = "Piano"
 
@@ -43,12 +46,11 @@ class Piano(object):
         self.dir = "collections/{:s}/".format(self.collection)
         self.sounds = sorted(os.listdir(self.dir))
 
-    def set_volume(self,num):
+    def set_volume(self, num):
+        # converting num variable to integer
         num = int(num)
         cmd = "amixer sset 'PCM' {}%".format(num)
         vol = os.system(cmd)
-
-        # pygame.mixer.music.set_volume(num)
 
     def make_discoverable(self):
         process = Popen(['./discoverable.sh'])
@@ -65,10 +67,13 @@ class Piano(object):
             for btn in self.buttons:
                 if btn.is_pressed:
                     print(self.buttons.index(btn))
-                # Sound will fade out in 2 sec, if something is being played.
+
+                    # Sound will fade out in 2 sec, if something is being played.
                     if self.is_playing():
-                        self.fadeout(2000);
+                        self.fadeout(500)
+
                     # play the sound that belongs to the button, using button index.
                     self.play_sound(self.dir + self.sounds[self.buttons.index(btn)])
+
                     # stops the program until button release
                     btn.wait_for_release()

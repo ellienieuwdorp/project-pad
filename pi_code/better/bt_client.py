@@ -1,7 +1,7 @@
 from bluetooth import *
 
 class BtClient(object):
-    """docstring for BtClient."""
+
     def __init__(self , piano):
         self.server_sock = BluetoothSocket( RFCOMM )
         self.server_sock.bind(("",PORT_ANY))
@@ -11,12 +11,13 @@ class BtClient(object):
 
         self.uuid = "94f39d29-7d6d-437d-973b-fba39e49d4ee"
 
-        advertise_service( self.server_sock, "SampleServer",
+        advertise_service( self.server_sock, "PianoServer",
                            service_id = self.uuid,
                            service_classes = [ self.uuid, SERIAL_PORT_CLASS ],
                            profiles = [ SERIAL_PORT_PROFILE ],
         #                   protocols = [ OBEX_UUID ]
                             )
+                            
         self.piano = piano
 
     # the most important function
