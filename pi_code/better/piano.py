@@ -66,6 +66,7 @@ class Piano(object):
             # foreach-loop
             for btn in self.buttons:
                 if btn.is_pressed:
+                    # debugging
                     print(self.buttons.index(btn))
 
                     # Sound will fade out in 2 sec, if something is being played.
